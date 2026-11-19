@@ -19,3 +19,4 @@ A responsive **GitHub Profile Finder** web application built with **React**, **V
 - **Vite**
 - **Tailwind CSS**
 - **GitHub REST API**
+# GitHub_Profile_Finder_React
