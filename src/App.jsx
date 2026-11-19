@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import ProfileCard from "./components/ProfileCard";
 import RepoSection from "./components/RepoSection";
@@ -34,6 +35,7 @@ const TRANSLATIONS = {
     sortUpdated: "Latest Updated",
     sortStars: "Most Stars",
   },
+
   ar: {
     title: "باحث حسابات GitHub",
     subtitle: "ابحث عن حسابات المطورين واستكشف أحدث مشاريعهم",
@@ -123,6 +125,7 @@ export default function App() {
           }
 
           const searchData = await searchRes.json();
+
           if (!searchData.items || searchData.items.length === 0) {
             throw new Error("notFoundError");
           }
@@ -171,11 +174,14 @@ export default function App() {
 
   function handleSubmit(e) {
     e.preventDefault();
+
     const trimmed = inputValue.trim();
+
     if (!trimmed) {
       setErrorKey("emptyError");
       return;
     }
+
     setSearchQuery(trimmed);
     setSearchTrigger((prev) => prev + 1);
   }
@@ -188,6 +194,7 @@ export default function App() {
 
   const formatJoinDate = (isoDate) => {
     if (!isoDate) return "";
+
     return new Date(isoDate).toLocaleDateString(
       lang === "ar" ? "ar-EG" : "en-US",
       { year: "numeric", month: "short", day: "numeric" }
@@ -203,10 +210,11 @@ export default function App() {
           : "bg-[#f8fafc] text-slate-950"
       }`}
     >
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-14">
-        {/* Top Controls */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
-          <div>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-10 md:py-14">
+
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-5 mb-8">
+
+          <div className="w-full min-w-0 text-center sm:text-start">
             <h1
               className={`text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight ${
                 darkMode ? "text-white" : "text-slate-950"
@@ -214,20 +222,22 @@ export default function App() {
             >
               {t.title}
             </h1>
+
             <p
-              className={`text-sm sm:text-base mt-1 font-medium ${
+              className={`text-sm sm:text-base mt-2 font-medium ${
                 darkMode ? "text-gray-400" : "text-slate-700"
               }`}
             >
               {t.subtitle}
             </p>
           </div>
-
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="grid grid-cols-2 sm:flex items-center gap-2 w-full sm:w-auto shrink-0">
             <button
               type="button"
-              onClick={() => setLang((prev) => (prev === "en" ? "ar" : "en"))}
-              className={`px-3.5 py-2 rounded-xl text-sm font-semibold border transition cursor-pointer ${
+              onClick={() =>
+                setLang((prev) => (prev === "en" ? "ar" : "en"))
+              }
+              className={`px-3 sm:px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold border transition cursor-pointer whitespace-nowrap ${
                 darkMode
                   ? "bg-slate-900 border-slate-700 hover:border-amber-300 text-sky-300"
                   : "bg-white border-slate-300 hover:border-sky-600 text-sky-800 shadow-xs"
@@ -236,10 +246,11 @@ export default function App() {
               {lang === "en" ? "🌐 عربي" : "🌐 English"}
             </button>
 
+            {/* Dark / Light Button */}
             <button
               type="button"
               onClick={() => setDarkMode((prev) => !prev)}
-              className={`px-3.5 py-2 rounded-xl text-sm font-semibold border transition cursor-pointer ${
+              className={`px-3 sm:px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold border transition cursor-pointer whitespace-nowrap ${
                 darkMode
                   ? "bg-slate-900 border-slate-700 hover:border-amber-300 text-amber-300"
                   : "bg-white border-slate-300 hover:border-amber-600 text-amber-900 shadow-xs"
@@ -247,10 +258,10 @@ export default function App() {
             >
               {darkMode ? "☀️ Light" : "🌙 Dark"}
             </button>
+
           </div>
         </div>
 
-        {/* Search Form */}
         <form
           onSubmit={handleSubmit}
           className="flex flex-col sm:flex-row gap-3 w-full"
@@ -261,7 +272,7 @@ export default function App() {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder={dynamicPlaceholder}
-            className={`w-full sm:flex-1 px-4 py-3 rounded-xl border-2 outline-none transition font-medium ${
+            className={`w-full sm:flex-1 min-w-0 px-4 py-3 rounded-xl border-2 outline-none transition font-medium ${
               isRTL ? "text-right" : "text-left"
             } ${
               darkMode
@@ -283,32 +294,42 @@ export default function App() {
           </button>
         </form>
 
-        {/* Quick Search Chips */}
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-4 text-xs sm:text-sm">
-          <span
-            className={`font-medium ${
-              darkMode ? "text-gray-400" : "text-slate-700"
-            }`}
-          >
-            {t.tryLabel}
-          </span>
-          {QUICK_USERS.map((name) => (
-            <button
-              key={name}
-              type="button"
-              onClick={() => handleQuickSearch(name)}
-              className={`px-3 py-1 rounded-xl border font-semibold transition cursor-pointer ${
-                darkMode
-                  ? "text-sky-300 border-slate-700 hover:border-sky-400 bg-slate-900/60"
-                  : "text-sky-800 border-slate-300 hover:border-sky-600 hover:bg-sky-50 bg-white shadow-2xs"
+        <div className="mt-6">
+
+          <div className="mb-3">
+            <span
+              className={`text-sm font-bold ${
+                darkMode ? "text-slate-300" : "text-slate-700"
               }`}
             >
-              {name}
-            </button>
-          ))}
+              {lang === "en" ? "Try These Users" : "جرّب الحسابات دي"}
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2">
+
+            {QUICK_USERS.map((name, index) => (
+              <button
+                key={name}
+                type="button"
+                onClick={() => handleQuickSearch(name)}
+                className={`px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-semibold transition-all duration-300 cursor-pointer text-center break-all ${
+                  index === 2
+                    ? "col-span-2 justify-self-center w-fit max-w-full"
+                    : "w-full min-w-0"
+                } ${
+                  darkMode
+                    ? "bg-slate-900/80 border-slate-700 text-sky-300 hover:border-amber-300 hover:text-amber-300 hover:bg-slate-800"
+                    : "bg-white border-slate-200 text-sky-800 hover:border-amber-500 hover:text-amber-700 hover:bg-amber-50 shadow-sm"
+                }`}
+              >
+                {name}
+              </button>
+            ))}
+
+          </div>
         </div>
 
-        {/* Loading Spinner */}
         {loading && (
           <div className="text-center mt-14">
             <div
@@ -318,6 +339,7 @@ export default function App() {
                   : "border-slate-300 border-t-amber-600"
               }`}
             ></div>
+
             <p
               className={`mt-4 font-medium ${
                 darkMode ? "text-gray-400" : "text-slate-800"
@@ -328,7 +350,6 @@ export default function App() {
           </div>
         )}
 
-        {/* Error Box */}
         {errorKey && !loading && (
           <div
             className={`mt-10 p-4 rounded-xl border text-center text-sm sm:text-base font-semibold ${
@@ -341,7 +362,6 @@ export default function App() {
           </div>
         )}
 
-        {/* Profile Card & Repositories */}
         {user && !loading && (
           <>
             <ProfileCard
@@ -362,6 +382,7 @@ export default function App() {
             />
           </>
         )}
+
       </div>
     </div>
   );
